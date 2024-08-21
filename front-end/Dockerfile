@@ -1,15 +1,15 @@
-FROM node:18
+FROM node:18-alpine
 
 # Set the working directory in the container
 WORKDIR /app/front-end
 
-# Install dependencies
-COPY package.json .
+ENV NODE_ENV development
+WORKDIR /app
+COPY package*.json .
 RUN npm install
 
 # Copy the project files
 COPY . .
-
 # Build the app for production
 RUN npm run build
 
