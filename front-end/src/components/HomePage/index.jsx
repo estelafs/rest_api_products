@@ -31,29 +31,29 @@ const HomePage = () => {
   return (
     <>
       <Box maxW={800} w='100%' h='100vh' py={10} px={2}>
-      <Box display="flex" alignItems="center" justifyContent="space-between">
-        <Heading> Produtos </Heading>
-        <Button colorScheme='blue' onClick={() => [setDataEdit({}), onOpen()]}>
-          NOVO PRODUTO
-        </Button>
+        <Box display='flex' alignItems='center' justifyContent='space-between'>
+          <Heading> Produtos </Heading>
+          <Button colorScheme='blue' onClick={() => [setDataEdit({}), onOpen()]}>
+            NOVO PRODUTO
+          </Button>
+        </Box>
+
+        {products.length > 0 &&
+          <ProductList
+            setProducts={setProducts}
+            products={products}
+            onOpen={onOpen}
+            setDataEdit={setDataEdit}
+          />
+        }
+
+        {products.length == 0 &&
+          <EmptyIndicator
+            element='produto'
+          />
+        }
       </Box>
 
-      {products.length > 0 &&
-        <ProductList
-          setProducts={setProducts}
-          products={products}
-          onOpen={onOpen}
-          setDataEdit={setDataEdit}
-        />
-      }
-
-      {products.length == 0 &&
-        <EmptyIndicator
-          element='produto'
-        />
-      }
-
-      </Box>
       {isOpen && (
         <ManageProductModal
           isOpen={isOpen}
