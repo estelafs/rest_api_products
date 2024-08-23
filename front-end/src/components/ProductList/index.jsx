@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 
-const ProductList = ({ setProducts, products, onOpen, setDataEdit }) => {
+const ProductList = ({ setProducts, products, onOpen, setDataEdit, setFilteredProducts }) => {
 
   const onDelete = async (productId) => {
     try {
@@ -20,6 +20,7 @@ const ProductList = ({ setProducts, products, onOpen, setDataEdit }) => {
           method: 'DELETE'
         }
       );
+      setFilteredProducts({ filterActive: false, data: [] });
       setProducts((previousData) =>
         previousData.filter((product) => product.id !== productId)
       );
@@ -50,7 +51,7 @@ const ProductList = ({ setProducts, products, onOpen, setDataEdit }) => {
               <Td p={0}>
                 <EditIcon
                   cursor='pointer'
-                  color="blue.500"
+                  color='blue.500'
                   fontSize={20}
                   onClick={() => [
                     setDataEdit({ id, name, description, value }),
@@ -61,7 +62,7 @@ const ProductList = ({ setProducts, products, onOpen, setDataEdit }) => {
               <Td p={0}>
                 <DeleteIcon
                   cursor='pointer'
-                  color="red.500"
+                  color='red.500'
                   fontSize={20}
                   onClick={() => onDelete(id)}
                 />

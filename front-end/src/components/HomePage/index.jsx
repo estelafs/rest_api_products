@@ -8,15 +8,24 @@ import {
   useDisclosure,
   Heading,
 } from '@chakra-ui/react';
+import SearchBar from '../SearchBar';
 
 const HomePage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState({ filterActive: false, data: [] });
   const [productToEdit, setDataEdit] = useState({});
+  const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    if (!filteredProducts.filterActive) {
+      setSearchValue('');
+    }
+  }, [filteredProducts]);
 
   const fetchProducts = async () => {
     try {
@@ -28,6 +37,7 @@ const HomePage = () => {
       throw new Error('Erro ao carregar os produtos.');
     }
   };
+
   return (
     <>
       <Box maxW={800} w='100%' h='100vh' py={10} px={2}>
@@ -38,16 +48,29 @@ const HomePage = () => {
           </Button>
         </Box>
 
-        {products.length > 0 &&
+        <SearchBar
+          setSearchValue={setSearchValue}
+          searchValue={searchValue}
+          setFilteredProducts={setFilteredProducts}
+        />
+
+        {(filteredProducts.filterActive
+            ? filteredProducts.data.length > 0 
+            : products.length > 0
+          ) &&
           <ProductList
             setProducts={setProducts}
-            products={products}
+            products={filteredProducts.data.length ? filteredProducts.data : products}
             onOpen={onOpen}
             setDataEdit={setDataEdit}
+            setFilteredProducts={setFilteredProducts}
           />
         }
 
-        {products.length == 0 &&
+        {(filteredProducts.filterActive
+            ? filteredProducts.data.length == 0 
+            : products.length == 0
+          ) &&
           <EmptyIndicator
             element='produto'
           />
@@ -61,6 +84,7 @@ const HomePage = () => {
           setProducts={setProducts}
           productToEdit={productToEdit}
           setDataEdit={setDataEdit}
+          setFilteredProducts={setFilteredProducts}
         />
       )}
     </>

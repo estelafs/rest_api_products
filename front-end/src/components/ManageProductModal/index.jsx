@@ -17,7 +17,7 @@ import {
 import { isEmpty } from 'lodash';
 import { useState } from 'react';
 
-const ManageProductModal = ({ setProducts, productToEdit, isOpen, onClose }) => {
+const ManageProductModal = ({ setProducts, productToEdit, setFilteredProducts, isOpen, onClose }) => {
   const [name, setName] = useState(productToEdit.name || '');
   const [description, setDescription] = useState(productToEdit.description || '');
   const [value, setValue] = useState(productToEdit.value || '');
@@ -40,6 +40,7 @@ const ManageProductModal = ({ setProducts, productToEdit, isOpen, onClose }) => 
         }
       );
       const data = await response.json();
+      setFilteredProducts({ filterActive: false, data: [] });
       setProducts((previousData) => [...previousData, data]);
     } catch (err) {
       console.log(err);
@@ -64,6 +65,7 @@ const ManageProductModal = ({ setProducts, productToEdit, isOpen, onClose }) => 
         }
       );
       const data = await response.json();
+      setFilteredProducts({ filterActive: false, data: [] });
       setProducts((previousData) =>
         previousData.map((product) => {
           if (product.id === productId) {
@@ -113,7 +115,7 @@ const ManageProductModal = ({ setProducts, productToEdit, isOpen, onClose }) => 
                 />
               </Box>
               <Box>
-                <FormLabel requiredIndicator='false'>Descrição</FormLabel>
+                <FormLabel requiredIndicator={false}>Descrição</FormLabel>
                 <Textarea
                   value={description}
                   placeholder='Insira a descrição...'
